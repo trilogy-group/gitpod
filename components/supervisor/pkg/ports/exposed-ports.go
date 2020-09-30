@@ -69,13 +69,18 @@ func (g *GitpodExposedPorts) Observe(ctx context.Context) (<-chan []ExposedPort,
 			prts, err := g.C.GetOpenPorts(ctx, g.WorkspaceID)
 			if err != nil {
 				errchan <- err
+				// TODO (clu): Does it need a `continue` or following `else` here?
 			}
 
 			res := make([]ExposedPort, len(prts))
 			for i, p := range prts {
+				var localport = uint32(p.TargetPort)
+				if localport == 0 {
+					localport = uint32(p.Port)
+				}
 				res[i] = ExposedPort{
 					GlobalPort: uint32(p.Port),
-					LocalPort:  uint32(p.TargetPort),
+					LocalPort:  localport,
 					Public:     p.Visibility == "public",
 					URL:        p.URL,
 				}
