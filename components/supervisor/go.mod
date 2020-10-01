@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/Netflix/go-env v0.0.0-20200908232752-3e802f601e28
+	github.com/armon/circbuf v0.0.0-20190214190532-5111143e8da2
 	github.com/creack/pty v1.1.11
 	github.com/gitpod-io/gitpod/common-go v0.0.0-00010101000000-000000000000
 	github.com/gitpod-io/gitpod/content-service v0.0.0-00010101000000-000000000000

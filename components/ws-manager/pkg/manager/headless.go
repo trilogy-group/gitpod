@@ -89,7 +89,7 @@ func (hl *HeadlessListener) Listen(ctx context.Context, pod *corev1.Pod) error {
 }
 
 func (hl *HeadlessListener) handleLogLine(pod *corev1.Pod, line string) (continueListening bool) {
-	var originalMsg theiaLogMessage
+	var originalMsg workspaceLogMessage
 	err := json.Unmarshal([]byte(line), &originalMsg)
 	if err != nil {
 		return true
@@ -99,7 +99,12 @@ func (hl *HeadlessListener) handleLogLine(pod *corev1.Pod, line string) (continu
 		return true
 	}
 
-	taskMsg := originalMsg.Message
+	var taskMsg taskLogMessage
+	if originalMsg.Type != "" && originalMsg.Data != "" {
+		taskMsg = originalMsg.taskLogMessage
+	} else {
+		taskMsg = originalMsg.Message.taskLogMessage
+	}
 	if taskMsg.Type == "workspaceTaskOutput" {
 		hl.OnHeadlessLog(pod, taskMsg.Data)
 		return true
@@ -115,14 +120,20 @@ func (hl *HeadlessListener) handleLogLine(pod *corev1.Pod, line string) (continu
 	return true
 }
 
-type theiaLogMessage struct {
+type taskLogMessage struct {
+	Type string `json:"type"`
+	Data string `json:"data"`
+}
+
+type workspaceLogMessage struct {
+	taskLogMessage
 	Message   theiaTaskLogMessage `json:"message"`
 	Component string              `json:"component"`
 }
 
+// backward compatibility
 type theiaTaskLogMessage struct {
-	Type string `json:"type"`
-	Data string `json:"data"`
+	taskLogMessage
 }
 
 const (
@@ -161,7 +172,7 @@ func (hl *HeadlessListener) listenAndRetry(ctx context.Context, pod *corev1.Pod,
 				if len(l) == 0 {
 					continue
 				}
-
+				log.Info("lastLineReadChan: '" + l + "'")
 				lastLineReadChan <- l
 			}
 
