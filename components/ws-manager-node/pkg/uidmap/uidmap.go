@@ -177,7 +177,7 @@ func (m *Uidmapper) handleUIDMappingRequest(ctx context.Context, disp *dispatch.
 	}
 	fields["hostPID"] = hostPID
 
-	err = m.writeMapping(hostPID, req.Gid, req.Mapping)
+	err = WriteMapping(hostPID, req.Gid, req.Mapping)
 	if err != nil {
 		log.WithError(err).WithFields(fields).Error("handleUIDMappingRequest: cannot write mapping")
 		return status.Error(codes.FailedPrecondition, "cannot write mapping")
@@ -209,7 +209,8 @@ func (m *Uidmapper) validateMapping(mapping []*ndeapi.UidmapCanaryRequest_Mappin
 	return nil
 }
 
-func (m *Uidmapper) writeMapping(hostPID uint64, gid bool, mapping []*ndeapi.UidmapCanaryRequest_Mapping) (err error) {
+// WriteMapping writes uid_map and gid_map
+func WriteMapping(hostPID uint64, gid bool, mapping []*ndeapi.UidmapCanaryRequest_Mapping) (err error) {
 	var fc string
 	for _, m := range mapping {
 		fc += fmt.Sprintf("%d %d %d\n", m.ContainerId, m.HostId, m.Size)
@@ -218,6 +219,10 @@ func (m *Uidmapper) writeMapping(hostPID uint64, gid bool, mapping []*ndeapi.Uid
 	var fn string
 	if gid {
 		fn = "gid_map"
+
+		// according to the user namespace man page we need to deny the setgroups syscall
+		// prior to setting the gid map.
+		ioutil.WriteFile(fmt.Sprintf("/proc/%d/setgroups", hostPID), []byte("deny"), 0644)
 	} else {
 		fn = "uid_map"
 	}
