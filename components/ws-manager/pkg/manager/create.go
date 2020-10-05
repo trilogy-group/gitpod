@@ -618,26 +618,26 @@ func (m *Manager) createDefaultSecurityContext() (*corev1.SecurityContext, error
 
 	res := &corev1.SecurityContext{
 		AllowPrivilegeEscalation: &boolTrue,
-		Capabilities: &corev1.Capabilities{
-			Add: []corev1.Capability{
-				"AUDIT_WRITE",      // Write records to kernel auditing log.
-				"FSETID",           // Don’t clear set-user-ID and set-group-ID permission bits when a file is modified.
-				"KILL",             // Bypass permission checks for sending signals.
-				"NET_BIND_SERVICE", // Bind a socket to internet domain privileged ports (port numbers less than 1024).
-				"SYS_PTRACE",       // Trace arbitrary processes using ptrace(2).
-			},
-			Drop: []corev1.Capability{
-				"SETPCAP",      // Modify process capabilities.
-				"CHOWN",        // Make arbitrary changes to file UIDs and GIDs (see chown(2)).
-				"NET_RAW",      // Use RAW and PACKET sockets.
-				"DAC_OVERRIDE", // Bypass file read, write, and execute permission checks.
-				"FOWNER",       // Bypass permission checks on operations that normally require the file system UID of the process to match the UID of the file.
-				"SYS_CHROOT",   // Use chroot(2), change root directory.
-				"SETFCAP",      // Set file capabilities.
-				"SETUID",       // Make arbitrary manipulations of process UIDs.
-				"SETGID",       // Make arbitrary manipulations of process GIDs and supplementary GID list.
-			},
-		},
+		// Capabilities: &corev1.Capabilities{
+		// 	Add: []corev1.Capability{
+		// 		"AUDIT_WRITE",      // Write records to kernel auditing log.
+		// 		"FSETID",           // Don’t clear set-user-ID and set-group-ID permission bits when a file is modified.
+		// 		"KILL",             // Bypass permission checks for sending signals.
+		// 		"NET_BIND_SERVICE", // Bind a socket to internet domain privileged ports (port numbers less than 1024).
+		// 		"SYS_PTRACE",       // Trace arbitrary processes using ptrace(2).
+		// 	},
+		// 	Drop: []corev1.Capability{
+		// 		"SETPCAP",      // Modify process capabilities.
+		// 		"CHOWN",        // Make arbitrary changes to file UIDs and GIDs (see chown(2)).
+		// 		"NET_RAW",      // Use RAW and PACKET sockets.
+		// 		"DAC_OVERRIDE", // Bypass file read, write, and execute permission checks.
+		// 		"FOWNER",       // Bypass permission checks on operations that normally require the file system UID of the process to match the UID of the file.
+		// 		"SYS_CHROOT",   // Use chroot(2), change root directory.
+		// 		"SETFCAP",      // Set file capabilities.
+		// 		"SETUID",       // Make arbitrary manipulations of process UIDs.
+		// 		"SETGID",       // Make arbitrary manipulations of process GIDs and supplementary GID list.
+		// 	},
+		// },
 		Privileged:             &boolFalse,
 		ReadOnlyRootFilesystem: &boolFalse,
 		RunAsGroup:             &gitpodGUID,

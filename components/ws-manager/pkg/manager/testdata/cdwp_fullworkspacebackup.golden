@@ -142,26 +142,6 @@
                     },
                     "imagePullPolicy": "Always",
                     "securityContext": {
-                        "capabilities": {
-                            "add": [
-                                "AUDIT_WRITE",
-                                "FSETID",
-                                "KILL",
-                                "NET_BIND_SERVICE",
-                                "SYS_PTRACE"
-                            ],
-                            "drop": [
-                                "SETPCAP",
-                                "CHOWN",
-                                "NET_RAW",
-                                "DAC_OVERRIDE",
-                                "FOWNER",
-                                "SYS_CHROOT",
-                                "SETFCAP",
-                                "SETUID",
-                                "SETGID"
-                            ]
-                        },
                         "privileged": false,
                         "runAsUser": 33333,
                         "runAsGroup": 33333,
