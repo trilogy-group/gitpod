@@ -617,7 +617,7 @@ func (m *Manager) createDefaultSecurityContext() (*corev1.SecurityContext, error
 	gitpodGUID := int64(33333)
 
 	res := &corev1.SecurityContext{
-		AllowPrivilegeEscalation: &boolFalse,
+		AllowPrivilegeEscalation: &boolTrue,
 		Capabilities: &corev1.Capabilities{
 			Add: []corev1.Capability{
 				"AUDIT_WRITE",      // Write records to kernel auditing log.
