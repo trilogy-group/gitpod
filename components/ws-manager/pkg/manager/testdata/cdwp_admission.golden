@@ -166,7 +166,8 @@
                         "runAsGroup": 33333,
                         "runAsNonRoot": true,
                         "readOnlyRootFilesystem": false,
-                        "allowPrivilegeEscalation": true
+                        "allowPrivilegeEscalation": true,
+                        "procMount": "Unmasked"
                     }
                 }
             ],

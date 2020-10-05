@@ -615,6 +615,7 @@ func (m *Manager) createWorkspaceVolumes(startContext *startWorkspaceContext) (t
 
 func (m *Manager) createDefaultSecurityContext() (*corev1.SecurityContext, error) {
 	gitpodGUID := int64(33333)
+	procMount := corev1.UnmaskedProcMount
 
 	res := &corev1.SecurityContext{
 		AllowPrivilegeEscalation: &boolTrue,
@@ -638,6 +639,7 @@ func (m *Manager) createDefaultSecurityContext() (*corev1.SecurityContext, error
 		// 		"SETGID",       // Make arbitrary manipulations of process GIDs and supplementary GID list.
 		// 	},
 		// },
+		ProcMount:              &procMount,
 		Privileged:             &boolFalse,
 		ReadOnlyRootFilesystem: &boolFalse,
 		RunAsGroup:             &gitpodGUID,
