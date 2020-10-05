@@ -126,14 +126,17 @@ serverProxyApiKey: "fF7+aCPvF9Pa0AEjmoZ+yWVh6PqBjM5VEA0wyQs3FH4="
 
 components:
   nodeDaemon:
+    serviceAnnotations: {}
     name: "node-daemon"
     theiaHostBasePath: /var/gitpod
 
   dbMigrations:
+    serviceAnnotations: {}
     enabled: true
     name: db-migrations
 
   db:
+    serviceAnnotations: {}
     name: "db"
     autoMigrate: true
     gcloudSqlProxy:
@@ -143,6 +146,7 @@ components:
     serviceType: ClusterIP
 
   dashboard:
+    serviceAnnotations: {}
     name: "dashboard"
     dependsOn:
     - "dashboard-configmap.yaml"
@@ -158,6 +162,7 @@ components:
     serviceType: ClusterIP
 
   imageBuilder:
+    serviceAnnotations: {}
     name: "image-builder"
     dependsOn:
     - "image-builder-configmap.yaml"
@@ -188,6 +193,7 @@ components:
         containerPort: 9500
 
   registryFacade:
+    serviceAnnotations: {}
     name: "registry-facade"
     disabled: false
     dependsOn:
@@ -217,6 +223,7 @@ components:
     serviceType: "ClusterIP"
 
   server:
+    serviceAnnotations: {}
     name: "server"
     replicas: 1
     dependsOn:
@@ -253,6 +260,7 @@ components:
       disabled: "false"
 
   workspace:
+    serviceAnnotations: {}
     ports:
       http:
         containerPort: 23000
@@ -279,6 +287,7 @@ components:
             dnsPolicy: None
 
   messagebus:
+    serviceAnnotations: {}
     name: "messagebus"
     resources:
       cpu: 100m
@@ -298,6 +307,7 @@ components:
         containerPort: 25672
 
   proxy:
+    serviceAnnotations: {}
     name: "proxy"
     svcName: "proxy"
     replicas: 1
@@ -308,11 +318,11 @@ components:
       http:
         expose: true
         containerPort: 80
-        nodePort: 31080
+        # nodePort: 31080
       https:
         expose: true
         containerPort: 443
-        nodePort: 31443
+        # nodePort: 31443
     loadBalancerIP: null
     serviceType: "LoadBalancer"
     serviceSessionAffinity: "None"
@@ -323,6 +333,7 @@ components:
       email: "certificate@your-domain.com"
 
   theiaServer:
+    serviceAnnotations: {}
     name: "theia-server"
     replicas: 1
     resources:
@@ -336,6 +347,7 @@ components:
     serviceType: "ClusterIP"
 
   wsManager:
+    serviceAnnotations: {}
     name: "ws-manager"
     resources:
       cpu: 100m
@@ -349,6 +361,7 @@ components:
         containerPort: 9500
 
   wsManagerBridge:
+    serviceAnnotations: {}
     name: "ws-manager-bridge"
     defaultConfig: true
     resources:
@@ -360,6 +373,7 @@ components:
         containerPort: 9500
 
   wsManagerNode:
+    serviceAnnotations: {}
     name: "ws-manager-node"
     registryProxyPort: 8081
     resources:
@@ -367,6 +381,7 @@ components:
       memory: 32Mi
 
   wsSync:
+    serviceAnnotations: {}
     name: "ws-sync"
     hostWorkspaceArea: /var/gitpod/workspaces
     servicePort: 8080
@@ -388,6 +403,7 @@ components:
         region: local
 
   wsScheduler:
+    serviceAnnotations: {}
     name: "ws-scheduler"
     disabled: false
     resources:
@@ -402,6 +418,7 @@ components:
       bufferFactor: 1
   
   cerc:
+    serviceAnnotations: {}
     name: cerc
     disabled: true
     resources:
@@ -429,6 +446,7 @@ components:
         period: 5m
 
   wsProxy:
+    serviceAnnotations: {}
     name: "ws-proxy"
     disabled: false
     resources:
