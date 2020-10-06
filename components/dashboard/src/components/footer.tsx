@@ -33,7 +33,7 @@ export class Footer extends React.Component<FooterProps, {}> {
                     </div>)
                 }
                 <div className="row" style={{ height: 30, fontSize: 10, marginBottom: 15 }}>
-                    <p>Copyright © 2020&nbsp;<a href="https://www.typefox.io/" target="_blank" rel="noopener">TypeFox</a>&nbsp;|&nbsp;All Rights Reserved
+                    <p>Copyright © 2020&nbsp;<a href="https://www.typefox.io/" target="_blank" rel="noopener">TypeFox</a>&nbsp;|&nbsp;All Rights Reserved&nbsp;|&nbsp;<p>© 2020 - DevGraph</p>&nbsp;<a href="https://www.devgraph.com/devspaces/#" target="_blank" rel="noopener">TypeFox</a>&nbsp;|&nbsp;<a href="https://www.devgraph.com/terms-and-conditions/" target="_blank" rel="noopener">Terms and conditions</a>
                     {(branding ? branding.links.legal : []).map(({ name, url }: Branding.Link) => {
                     return (<span key={name}>&nbsp;|&nbsp;{this.createAnchor(name, url)}</span>);
                     })}
