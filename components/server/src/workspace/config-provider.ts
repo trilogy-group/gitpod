@@ -53,7 +53,7 @@ export class ConfigProvider {
             }
             const services = hostContext.services;
             const contextRepoConfig = services.fileProvider.getGitpodFileContent(commit, user);
-            const definitelyGpConfig = this.fetchExternalGitpodFileContent({span}, commit.repository);
+            const definitelyGpConfig = this.fetchExternalGitpodFileContent({ span }, commit.repository);
             const inferredConfig = this.inferingConfigProvider.infer(user, commit);
 
             let customConfigString = await contextRepoConfig;
@@ -120,7 +120,7 @@ export class ConfigProvider {
 
                 config.image = <ExternalImageConfigFile>{
                     ...image,
-                    externalSource: await this.fetchWorkspaceImageSourceDocker({span}, repo, rev, user, dockerfilePath)
+                    externalSource: await this.fetchWorkspaceImageSourceDocker({ span }, repo, rev, user, dockerfilePath)
                 }
             }
 
@@ -133,22 +133,25 @@ export class ConfigProvider {
              * Some feature flags get attached to any workspace they create - others remain specific to the user.
              * Here we attach the workspace-persisted feature flags to the workspace.
              */
-            delete(config._featureFlags);
+            delete (config._featureFlags);
             if (!!user.featureFlags) {
-                const workspacePersistedFlags: NamedWorkspaceFeatureFlag[] = [ "full_workspace_backup" ];
+                const workspacePersistedFlags: NamedWorkspaceFeatureFlag[] = ["full_workspace_backup"];
                 config._featureFlags = workspacePersistedFlags.filter(f => (user.featureFlags!.permanentWSFeatureFlags || []).includes(f));
             }
 
-            if (!!config.ide) {
-                const mapped = this.env.ideImageAliases[config.ide];
-                if (!!mapped) {
-                    config.ide = mapped;
+            if (this.authService.hasPermission(user, 'ide-settings')) {
+                const ideImageAlias = config.ide || user.additionalData?.ideSettings?.imageAlias;
+                if (ideImageAlias) {
+                    const mapped = this.env.ideImageAliases[ideImageAlias];
+                    if (!!mapped) {
+                        config.ide = mapped;
+                    }
                 }
             }
 
             return config;
         } catch (e) {
-            TraceContext.logError({span}, e);
+            TraceContext.logError({ span }, e);
             throw e;
         } finally {
             span.finish();
@@ -187,7 +190,7 @@ export class ConfigProvider {
                 revision: lastDockerFileSha
             };
         } catch (e) {
-            TraceContext.logError({span}, e);
+            TraceContext.logError({ span }, e);
             throw e;
         } finally {
             span.finish();
@@ -223,10 +226,10 @@ export class ConfigProvider {
             const baseConfigBasePath = `${repository.name}`;
 
             const possibleConfigs = [
-                [this.fetchDefinitelyGpContent({span}, `${ownerConfigBasePath}/.gitpod.yml`), ownerConfigBasePath],
-                [this.fetchDefinitelyGpContent({span}, `${ownerConfigBasePath}/.gitpod`), ownerConfigBasePath],
-                [this.fetchDefinitelyGpContent({span}, `${baseConfigBasePath}/.gitpod.yml`), baseConfigBasePath],
-                [this.fetchDefinitelyGpContent({span}, `${baseConfigBasePath}/.gitpod`), baseConfigBasePath]
+                [this.fetchDefinitelyGpContent({ span }, `${ownerConfigBasePath}/.gitpod.yml`), ownerConfigBasePath],
+                [this.fetchDefinitelyGpContent({ span }, `${ownerConfigBasePath}/.gitpod`), ownerConfigBasePath],
+                [this.fetchDefinitelyGpContent({ span }, `${baseConfigBasePath}/.gitpod.yml`), baseConfigBasePath],
+                [this.fetchDefinitelyGpContent({ span }, `${baseConfigBasePath}/.gitpod`), baseConfigBasePath]
             ]
             for (const [configPromise, basePath] of possibleConfigs) {
                 const ownerConfig = await configPromise;
@@ -242,7 +245,7 @@ export class ConfigProvider {
                 basePath: baseConfigBasePath
             }
         } catch (e) {
-            TraceContext.logError({span}, e);
+            TraceContext.logError({ span }, e);
             throw e;
         } finally {
             span.finish();
@@ -264,7 +267,7 @@ export class ConfigProvider {
             }
             return content;
         } catch (e) {
-            TraceContext.logError({span}, e);
+            TraceContext.logError({ span }, e);
             throw e;
         } finally {
             span.finish();

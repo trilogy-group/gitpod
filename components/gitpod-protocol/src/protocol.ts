@@ -87,10 +87,15 @@ export namespace User {
 export interface AdditionalUserData {
     platforms?: UserPlatform[];
     emailNotificationSettings?: EmailNotificationSettings;
+    ideSettings?: IDESettings;
 }
 
 export interface EmailNotificationSettings {
     disallowTransactionalEmails?: boolean;
+}
+
+export interface IDESettings {
+    imageAlias?: string
 }
 
 export interface UserPlatform {
